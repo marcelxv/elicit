@@ -28,7 +28,9 @@ use middleware::auth::auth_middleware;
 
 /// Serve the landing page HTML
 async fn serve_landing_page() -> Html<String> {
+    // Try local path first (for development), then container path (for deployment)
     let html_content = fs::read_to_string("elicit-landing.html")
+        .or_else(|_| fs::read_to_string("/app/elicit-landing.html"))
         .unwrap_or_else(|_| "<h1>Landing page not found</h1>".to_string());
     Html(html_content)
 }

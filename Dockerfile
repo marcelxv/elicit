@@ -40,6 +40,9 @@ RUN apt-get update && apt-get install -y \
 # Copy the binary from builder stage
 COPY --from=builder /app/target/release/elicit /usr/local/bin/elicit
 
+# Copy the landing page HTML file
+COPY elicit-landing.html /app/elicit-landing.html
+
 # Make binary executable
 RUN chmod +x /usr/local/bin/elicit
 
