@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elicit - Rust-Powered PDF Extraction for Engineers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#020617'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out 0.3s both'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0px)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-50">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden min-h-screen flex items-center">
+        <!-- Enhanced Background Pattern -->
+        <div class="absolute inset-0">
+            <!-- Gradient Background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+            <!-- Grid Pattern -->
+            <div class="absolute inset-0 opacity-10"
+                style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0); background-size: 40px 40px;">
+            </div>
+            <!-- Animated Glow -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl animate-pulse"
+                style="animation-delay: -2s;"></div>
+        </div>
+
+        <!-- Dynamic Floating Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <!-- Enhanced PDF Icons with Glow -->
+            <div class="absolute top-20 left-10 animate-float opacity-30">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-400/20 rounded-lg blur-md"></div>
+                    <svg class="w-10 h-10 text-blue-400 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="absolute top-32 right-16 animate-float opacity-25" style="animation-delay: -2s;">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-green-400/20 rounded-lg blur-md"></div>
+                    <svg class="w-8 h-8 text-green-400 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="absolute bottom-32 left-20 animate-float opacity-20" style="animation-delay: -4s;">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-purple-400/20 rounded-lg blur-md"></div>
+                    <svg class="w-12 h-12 text-purple-400 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Enhanced Text Extraction Lines with Glow -->
+            <div class="absolute top-40 right-8 opacity-40">
+                <div class="space-y-2">
+                    <div
+                        class="h-1 w-20 bg-gradient-to-r from-blue-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-blue-400/50">
+                    </div>
+                    <div class="h-1 w-16 bg-gradient-to-r from-green-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-green-400/50"
+                        style="animation-delay: -1s;"></div>
+                    <div class="h-1 w-24 bg-gradient-to-r from-purple-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-purple-400/50"
+                        style="animation-delay: -2s;"></div>
+                </div>
+            </div>
+            <div class="absolute bottom-40 right-20 opacity-35">
+                <div class="space-y-2">
+                    <div class="h-1 w-18 bg-gradient-to-r from-orange-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-orange-400/50"
+                        style="animation-delay: -0.5s;"></div>
+                    <div class="h-1 w-22 bg-gradient-to-r from-cyan-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-cyan-400/50"
+                        style="animation-delay: -1.5s;"></div>
+                    <div class="h-1 w-14 bg-gradient-to-r from-pink-400 to-transparent rounded-full animate-pulse-slow shadow-lg shadow-pink-400/50"
+                        style="animation-delay: -2.5s;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-24 max-w-6xl relative z-10">
+            <!-- Main Hero Content -->
+            <div class="text-center">
+                <!-- Enhanced Logo and Title -->
+                <div class="mb-12 animate-slide-up">
+                    <div class="relative inline-block">
+                        <!-- Glowing Background -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-orange-500/20 rounded-3xl blur-2xl scale-110">
+                        </div>
+                        <h1
+                            class="relative text-8xl md:text-9xl font-black tracking-tight bg-gradient-to-r from-white via-blue-200 to-orange-200 bg-clip-text text-transparent drop-shadow-2xl">
+                            Elicit
+                        </h1>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-3xl md:text-4xl text-slate-300 font-light tracking-wide">Rust-Powered PDF
+                            Extraction</p>
+                        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-orange-400 mx-auto mt-4 rounded-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Subtitle -->
+                <div class="animate-fade-in mb-16">
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-xl md:text-2xl text-slate-300 leading-relaxed mb-12 font-light">
+                            Built by engineers, for engineers. Stop paying per document and eliminate API pooling
+                            bottlenecks.
+                        </p>
+
+                        <!-- Enhanced Extraction Process Visualization -->
+                        <div class="relative">
+                            <!-- Background Glow -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-orange-500/10 to-green-500/10 rounded-2xl blur-xl">
+                            </div>
+
+                            <div
+                                class="relative bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 md:p-12">
+                                <div
+                                    class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8">
+                                    <!-- PDF Input -->
+                                    <div class="flex flex-col items-center group">
+                                        <div class="relative">
+                                            <!-- Glow Effect -->
+                                            <div
+                                                class="absolute inset-0 bg-blue-500/30 rounded-xl blur-lg group-hover:bg-blue-400/40 transition-all duration-500">
+                                            </div>
+                                            <div
+                                                class="relative w-20 h-24 bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-400/50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-500">
+                                                <svg class="w-10 h-10 text-blue-400" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <span class="text-lg font-semibold text-blue-400">PDF Input</span>
+                                        <span class="text-sm text-slate-500 mt-1">Any document</span>
+                                    </div>
+
+                                    <!-- Arrow 1 -->
+                                    <div class="flex items-center">
+                                        <div class="flex items-center space-x-1 md:space-x-2">
+                                            <div
+                                                class="w-3 h-0.5 bg-gradient-to-r from-blue-400 to-orange-400 animate-pulse rounded-full">
+                                            </div>
+                                            <div class="w-3 h-0.5 bg-gradient-to-r from-blue-400 to-orange-400 animate-pulse rounded-full"
+                                                style="animation-delay: 0.2s;"></div>
+                                            <div class="w-3 h-0.5 bg-gradient-to-r from-blue-400 to-orange-400 animate-pulse rounded-full"
+                                                style="animation-delay: 0.4s;"></div>
+                                            <svg class="w-6 h-6 text-orange-400 animate-pulse" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rust Engine -->
+                                    <div class="flex flex-col items-center group">
+                                        <div class="relative">
+                                            <!-- Enhanced Glow Effect -->
+                                            <div
+                                                class="absolute inset-0 bg-orange-500/30 rounded-xl blur-lg group-hover:bg-orange-400/40 transition-all duration-500">
+                                            </div>
+                                            <div
+                                                class="relative w-20 h-24 bg-gradient-to-br from-slate-900 to-black border-2 border-orange-400/50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-500 overflow-hidden">
+                                                <!-- Animated Processing Effect -->
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-r from-transparent via-orange-400/20 to-transparent animate-pulse transform -skew-x-12">
+                                                </div>
+                                                <div class="relative z-10">
+                                                    <div class="text-2xl animate-float">⚡</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="text-lg font-semibold text-orange-400">Rust Engine</span>
+                                        <span class="text-sm text-slate-500 mt-1">Lightning fast</span>
+                                    </div>
+
+                                    <!-- Arrow 2 -->
+                                    <div class="flex items-center">
+                                        <div class="flex items-center space-x-1 md:space-x-2">
+                                            <svg class="w-6 h-6 text-green-400 animate-pulse" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                            <div class="w-3 h-0.5 bg-gradient-to-r from-orange-400 to-green-400 animate-pulse rounded-full"
+                                                style="animation-delay: 0.6s;"></div>
+                                            <div class="w-3 h-0.5 bg-gradient-to-r from-orange-400 to-green-400 animate-pulse rounded-full"
+                                                style="animation-delay: 0.8s;"></div>
+                                            <div class="w-3 h-0.5 bg-gradient-to-r from-orange-400 to-green-400 animate-pulse rounded-full"
+                                                style="animation-delay: 1s;"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clean Text -->
+                                    <div class="flex flex-col items-center group">
+                                        <div class="relative">
+                                            <!-- Glow Effect -->
+                                            <div
+                                                class="absolute inset-0 bg-green-500/30 rounded-xl blur-lg group-hover:bg-green-400/40 transition-all duration-500">
+                                            </div>
+                                            <div
+                                                class="relative w-20 h-24 bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-green-400/50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-500">
+                                                <svg class="w-10 h-10 text-green-400" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <span class="text-lg font-semibold text-green-400">Clean Text</span>
+                                        <span class="text-sm text-slate-500 mt-1">Perfect output</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced CTA Button -->
+                        <div class="animate-fade-in mt-16" style="animation-delay: 0.6s;">
+                            <div class="relative inline-block">
+                                <!-- Button Glow -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-blue-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-all duration-300">
+                                </div>
+                                <a href="#waitlist"
+                                    class="relative inline-flex items-center px-12 py-5 bg-gradient-to-r from-blue-500 to-orange-500 text-white font-bold text-lg rounded-xl hover:from-blue-400 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25 group">
+                                    <span>Get Early Access</span>
+                                    <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-16 max-w-4xl">
+        <!-- Problem/Solution Section -->
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+                <div class="text-red-400 mb-3">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium mb-3 text-slate-200">The Problem</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li>• LlamaParse costs scale with usage</li>
+                    <li>• API pooling creates latency bottlenecks</li>
+                    <li>• External dependencies affect reliability</li>
+                    <li>• No control over processing pipeline</li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-slate-900 rounded-lg border border-slate-800">
+                <div class="text-green-400 mb-3">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium mb-3 text-slate-200">The Solution</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li>• Fixed infrastructure costs only</li>
+                    <li>• Sub-5s processing with local execution</li>
+                    <li>• 99.9% uptime with self-hosted control</li>
+                    <li>• Full customization and optimization</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Technical Specs -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-semibold mb-8 text-center">Built for Performance</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center p-6 bg-slate-900 rounded-lg border border-slate-800">
+                    <div class="text-3xl font-bold text-slate-200 mb-2">100+</div>
+                    <div class="text-sm text-slate-400">Concurrent Requests</div>
+                </div>
+                <div class="text-center p-6 bg-slate-900 rounded-lg border border-slate-800">
+                    <div class="text-3xl font-bold text-slate-200 mb-2">&lt;5s</div>
+                    <div class="text-sm text-slate-400">Processing Time</div>
+                </div>
+                <div class="text-center p-6 bg-slate-900 rounded-lg border border-slate-800">
+                    <div class="text-3xl font-bold text-slate-200 mb-2">512MB</div>
+                    <div class="text-sm text-slate-400">Memory per Request</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Overview -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-semibold mb-8 text-center">Enterprise-Ready PDF Processing</h2>
+            <div class="p-8 bg-slate-900 rounded-lg border border-slate-800">
+                <div class="text-center max-w-2xl mx-auto">
+                    <p class="text-lg text-slate-300 mb-6 leading-relaxed">
+                        Self-hosted Rust service delivering consistent sub-5s PDF text extraction with predictable costs
+                        and zero vendor lock-in.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 text-sm text-slate-400">
+                        <span class="px-3 py-1 bg-slate-800 rounded-full border border-slate-700">Memory Safe</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-full border border-slate-700">High
+                            Concurrency</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-full border border-slate-700">OCR Support</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-full border border-slate-700">REST API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Signup -->
+        <div id="waitlist" class="max-w-md mx-auto text-center">
+            <h2 class="text-2xl font-semibold mb-4">Join the Waiting List</h2>
+            <p class="text-slate-400 mb-8 text-sm">
+                Get early access when we launch. Built for engineers who value performance and cost predictability.
+            </p>
+
+            <form id="waitlist-form" class="space-y-4">
+                <div class="relative">
+                    <input type="email" id="email" required placeholder="your.email@company.com"
+                        class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-500 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors">
+                </div>
+                <button type="submit"
+                    class="w-full px-6 py-3 bg-slate-50 text-slate-950 font-medium rounded-lg hover:bg-slate-200 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-950">
+                    Join Waiting List
+                </button>
+            </form>
+
+            <div id="success-message"
+                class="hidden mt-4 p-3 bg-green-900/50 text-green-400 border border-green-800 rounded-lg text-sm">
+                ✓ Thanks! We'll notify you when Elicit is ready.
+            </div>
+
+            <div id="error-message"
+                class="hidden mt-4 p-3 bg-red-900/50 text-red-400 border border-red-800 rounded-lg text-sm">
+                Something went wrong. Please try again.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-20 pt-12 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto">
+                <!-- Main Footer Content -->
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <!-- Brand & Attribution -->
+                    <div class="md:col-span-1">
+                        <div class="flex items-center mb-4">
+                            <div class="text-2xl mr-3">⚡</div>
+                            <h3
+                                class="text-xl font-bold bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-transparent">
+                                Elicit</h3>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+                            Rust-powered PDF extraction service built by engineers, for engineers.
+                        </p>
+                        <div class="flex items-center text-xs text-slate-500">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            <span>
+                                <a href="https://github.com/marcelxv"
+                                    class="text-slate-400 hover:text-slate-300 transition-colors font-medium">marcelxv</a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Technology Stack -->
+                    <div class="md:col-span-1">
+                        <h4 class="font-semibold text-slate-300 mb-4">Powered By</h4>
+                        <div class="space-y-3">
+                            <!-- Rust -->
+                            <div class="flex items-center text-sm text-slate-400">
+                                <div class="w-6 h-6 mr-3 flex items-center justify-center">
+                                    <svg viewBox="0 0 24 24" class="w-5 h-5 text-orange-500" fill="currentColor">
+                                        <path
+                                            d="M23.8346 11.7033l-1.0073-.6236a13.7268 13.7268 0 0 0-.0283-.2936l.8656-.8069a.3483.3483 0 0 0-.1154-.5814l-1.0821-.4569a13.5734 13.5734 0 0 0-.0853-.2849l.7003-.9713a.3462.3462 0 0 0-.2257-.5521l-1.1323-.2656a13.9621 13.9621 0 0 0-.1397-.2677l.5158-1.1084a.3483.3483 0 0 0-.3347-.5056l-1.1481-.0648a14.1035 14.1035 0 0 0-.1916-.2422l.3207-1.2111a.3462.3462 0 0 0-.4304-.4304l-1.2111.3207a14.1035 14.1035 0 0 0-.2422-.1916l-.0648-1.1481a.3483.3483 0 0 0-.5056-.3347l-1.1084.5158a13.9621 13.9621 0 0 0-.2677-.1397l-.2656-1.1323a.3462.3462 0 0 0-.5521-.2257l-.9713.7003a13.5734 13.5734 0 0 0-.2849-.0853l-.4569-1.0821a.3483.3483 0 0 0-.5814-.1154l-.8069.8656a13.7268 13.7268 0 0 0-.2936-.0283l-.6236-1.0073a.3462.3462 0 0 0-.6067 0l-.6236 1.0073a13.7268 13.7268 0 0 0-.2936.0283l-.8069-.8656a.3483.3483 0 0 0-.5814.1154l-.4569 1.0821a13.5734 13.5734 0 0 0-.2849.0853l-.9713-.7003a.3462.3462 0 0 0-.5521.2257l-.2656 1.1323a13.9621 13.9621 0 0 0-.2677.1397l-1.1084-.5158a.3483.3483 0 0 0-.5056.3347l-.0648 1.1481a14.1035 14.1035 0 0 0-.2422.1916l-1.2111-.3207a.3462.3462 0 0 0-.4304.4304l.3207 1.2111a14.1035 14.1035 0 0 0-.1916.2422l-1.1481.0648a.3483.3483 0 0 0-.3347.5056l.5158 1.1084a13.9621 13.9621 0 0 0-.1397.2677l-1.1323.2656a.3462.3462 0 0 0-.2257.5521l.7003.9713a13.5734 13.5734 0 0 0-.0853.2849l-1.0821.4569a.3483.3483 0 0 0-.1154.5814l.8656.8069a13.7268 13.7268 0 0 0-.0283.2936l-1.0073.6236a.3462.3462 0 0 0 0 .6067l1.0073.6236a13.7268 13.7268 0 0 0 .0283.2936l-.8656.8069a.3483.3483 0 0 0 .1154.5814l1.0821.4569a13.5734 13.5734 0 0 0 .0853.2849l-.7003.9713a.3462.3462 0 0 0 .2257.5521l1.1323.2656a13.9621 13.9621 0 0 0 .1397.2677l-.5158 1.1084a.3483.3483 0 0 0 .3347.5056l1.1481.0648a14.1035 14.1035 0 0 0 .1916.2422l-.3207 1.2111a.3462.3462 0 0 0 .4304.4304l1.2111-.3207a14.1035 14.1035 0 0 0 .2422.1916l.0648 1.1481a.3483.3483 0 0 0 .5056.3347l1.1084-.5158a13.9621 13.9621 0 0 0 .2677.1397l.2656 1.1323a.3462.3462 0 0 0 .5521.2257l.9713-.7003a13.5734 13.5734 0 0 0 .2849.0853l.4569 1.0821a.3483.3483 0 0 0 .5814.1154l.8069-.8656a13.7268 13.7268 0 0 0 .2936.0283l.6236 1.0073a.3462.3462 0 0 0 .6067 0l.6236-1.0073a13.7268 13.7268 0 0 0 .2936-.0283l.8069.8656a.3483.3483 0 0 0 .5814-.1154l.4569-1.0821a13.5734 13.5734 0 0 0 .2849-.0853l.9713.7003a.3462.3462 0 0 0 .5521-.2257l.2656-1.1323a13.9621 13.9621 0 0 0 .2677-.1397l1.1084.5158a.3483.3483 0 0 0 .5056-.3347l.0648-1.1481a14.1035 14.1035 0 0 0 .2422-.1916l1.2111.3207a.3462.3462 0 0 0 .4304-.4304l-.3207-1.2111a14.1035 14.1035 0 0 0 .1916-.2422l1.1481-.0648a.3483.3483 0 0 0 .3347-.5056l-.5158-1.1084a13.9621 13.9621 0 0 0 .1397-.2677l1.1323-.2656a.3462.3462 0 0 0 .2257-.5521l-.7003-.9713a13.5734 13.5734 0 0 0 .0853-.2849l1.0821-.4569a.3483.3483 0 0 0 .1154-.5814l-.8656-.8069a13.7268 13.7268 0 0 0 .0283-.2936l1.0073-.6236a.3462.3462 0 0 0 0-.6067zM12 18.0416a6.0416 6.0416 0 1 1 6.0416-6.0416A6.0416 6.0416 0 0 1 12 18.0416z" />
+                                    </svg>
+                                </div>
+                                <span>Rust Programming Language</span>
+                            </div>
+
+                            <!-- Railway -->
+                            <div class="flex items-center text-sm text-slate-400">
+                                <div class="w-6 h-6 mr-3 flex items-center justify-center">
+                                    <div
+                                        class="w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-sm flex items-center justify-center text-white text-xs font-bold">
+                                        R
+                                    </div>
+                                </div>
+                                <span>Railway Platform</span>
+                            </div>
+
+                            <!-- Docker -->
+                            <div class="flex items-center text-sm text-slate-400">
+                                <div class="w-6 h-6 mr-3 flex items-center justify-center">
+                                    <svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-500" fill="currentColor">
+                                        <path
+                                            d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z" />
+                                    </svg>
+                                </div>
+                                <span>Docker Containerization</span>
+                            </div>
+
+                            <!-- Axum -->
+                            <div class="flex items-center text-sm text-slate-400">
+                                <div class="w-6 h-6 mr-3 flex items-center justify-center">
+                                    <div
+                                        class="w-5 h-5 bg-slate-700 rounded flex items-center justify-center text-slate-300 text-xs font-mono">
+                                        A
+                                    </div>
+                                </div>
+                                <span>Axum Web Framework</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance & Features -->
+                    <div class="md:col-span-1">
+                        <h4 class="font-semibold text-slate-300 mb-4">Key Features</h4>
+                        <div class="space-y-2 text-sm text-slate-400">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <span>Memory-safe concurrency</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <span>OCR text extraction</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <span>REST API with auth</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <span>Health monitoring</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <span>Structured logging</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Bar -->
+                <div class="pt-6 border-t border-slate-800">
+                    <div class="flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                        <div class="mb-2 md:mb-0">
+                            <span>© 2024 Elicit. Built with ❤️ and zero-cost abstractions.</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span>Made by engineers, for engineers</span>
+                            <div class="w-1 h-1 bg-slate-600 rounded-full"></div>
+                            <span>Open source soon™</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('waitlist-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+
+            // Hide previous messages
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            // Show loading state
+            submitButton.textContent = 'Joining...';
+            submitButton.disabled = true;
+
+            // Submit to waitlist endpoint
+            try {
+                const response = await fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    successMessage.classList.remove('hidden');
+                    document.getElementById('email').value = '';
+                    console.log('Successfully added to waitlist:', email);
+                } else {
+                    errorMessage.classList.remove('hidden');
+                    console.error('Waitlist signup failed:', result.message || 'Unknown error');
+                }
+            } catch (error) {
+                errorMessage.classList.remove('hidden');
+                console.error('Network error during waitlist signup:', error);
+            }
+            
+            submitButton.textContent = 'Join Waiting List';
+            submitButton.disabled = false;
+        });
+
+        // Smooth scroll for CTA button
+        document.querySelector('a[href="#waitlist"]').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('waitlist').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>

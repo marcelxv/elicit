@@ -1,0 +1,6 @@
+test@example.com
+test@example.com
+newuser@example.com
+newuser@example.com
+test-cors-fix@example.com
+marcelx@protonmail.com

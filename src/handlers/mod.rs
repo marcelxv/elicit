@@ -1,8 +1,10 @@
 pub mod extract;
 pub mod health;
+pub mod waitlist;
 
 pub use extract::*;
 pub use health::*;
+pub use waitlist::*;
 
 #[cfg(test)]
 use axum::{

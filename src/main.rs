@@ -1,12 +1,12 @@
 use axum::{
     extract::DefaultBodyLimit,
     http::StatusCode,
-    response::Json,
+    response::{Html, Json},
     routing::{get, post},
     Router,
 };
 use serde_json::{json, Value};
-use std::env;
+use std::{env, fs};
 use tokio::net::TcpListener;
 use tower::ServiceBuilder;
 use tower_http::{
@@ -23,8 +23,15 @@ mod models;
 mod services;
 
 use config::Config;
-use handlers::{extract_handler, extract_binary_handler, health_handler, ready_handler};
+use handlers::{extract_handler, extract_binary_handler, health_handler, ready_handler, waitlist_handler};
 use middleware::auth::auth_middleware;
+
+/// Serve the landing page HTML
+async fn serve_landing_page() -> Html<String> {
+    let html_content = fs::read_to_string("elicit-landing.html")
+        .unwrap_or_else(|_| "<h1>Landing page not found</h1>".to_string());
+    Html(html_content)
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -47,19 +54,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::info!("Max concurrent requests: {}", config.max_concurrent_requests);
 
     // Build our application with routes
-    let app = Router::new()
-        // Health endpoints (no auth required)
+    // Routes that don't require authentication
+    let public_routes = Router::new()
+        .route("/", get(serve_landing_page))
         .route("/health", get(health_handler))
         .route("/ready", get(ready_handler))
-        // API endpoints (auth required)
+        .route("/api/waitlist", post(waitlist_handler));
+
+    // Routes that require authentication
+    let protected_routes = Router::new()
         .route("/api/v1/extract", post(extract_handler))
         .route("/api/v1/extract/binary", post(extract_binary_handler))
+        .layer(axum::middleware::from_fn(auth_middleware));
+
+    let app = Router::new()
+        .merge(public_routes)
+        .merge(protected_routes)
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
                 .layer(CorsLayer::permissive())
                 .layer(DefaultBodyLimit::max(config.max_file_size_mb * 1024 * 1024))
-                .layer(axum::middleware::from_fn(auth_middleware))
         );
 
     // Determine port from environment (Railway compatibility)
