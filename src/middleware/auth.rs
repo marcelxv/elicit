@@ -13,9 +13,9 @@ pub async fn auth_middleware(headers: HeaderMap, request: Request, next: Next) -
     let path = request.uri().path();
     let method = request.method();
     
-    // Skip auth for health endpoint
-    if path == "/health" {
-        debug!("Skipping auth for health endpoint");
+    // Skip auth for health endpoints
+    if path == "/health" || path == "/ready" {
+        debug!("Skipping auth for health endpoint: {}", path);
         return Ok(next.run(request).await);
     }
 
