@@ -1,0 +1,49 @@
+[package]
+name = "elicit"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Web framework
+axum = { version = "0.7", features = ["multipart"] }
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# PDF processing
+pdf-extract = "0.7"
+lopdf = "0.32"
+# OCR support
+# tesseract = "0.14"  # Commented out until we implement full OCR
+image = "0.24"
+tempfile = "3.8"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Configuration
+config = "0.14"
+dotenvy = "0.15"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Utilities
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+bytes = "1.0"
+once_cell = "1.19"
+
+# File handling
+multipart = "0.18"
+dotenv = "0.15.0"
+
+[dev-dependencies]
+reqwest = { version = "0.11", features = ["multipart"] }
+tempfile = "3.0"

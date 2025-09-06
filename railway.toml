@@ -1,0 +1,21 @@
+[build]
+# Use Dockerfile for build
+builder = "dockerfile"
+
+[deploy]
+# Health check configuration
+healthcheckPath = "/ready"
+healthcheckTimeout = 10
+startCommand = "/usr/local/bin/elicit"
+
+# Resource limits
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+# Environment variables
+[deploy.env]
+# Railway will automatically set PORT
+# Add any other environment variables here
+RUST_LOG = "info"
+MAX_CONCURRENT_REQUESTS = "100"
+MAX_FILE_SIZE_MB = "10"

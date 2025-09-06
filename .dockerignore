@@ -1,0 +1,76 @@
+# Rust build artifacts
+target/
+**/*.rs.bk
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+README*
+CHANGELOG*
+LICENSE*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Test files
+tests/
+test/
+__tests__/
+*.test.*
+*.spec.*
+
+# Temporary files
+tmp/
+temp/
+
+# Docker files (except Dockerfile)
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Package manager files
+package-lock.json
+yarn.lock
+
+# Rust specific
+Cargo.lock
+# Note: Cargo.lock should be included for applications, excluded for libraries
+# We'll include it since this is an application
+!Cargo.lock
