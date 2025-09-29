@@ -10,8 +10,10 @@ use crate::error::{AppError, AppResult};
 use crate::models::{ProcessedFile, ExtractResponse};
 use crate::services::PdfProcessor;
 use crate::middleware::rate_limit::REQUEST_SEMAPHORE;
+use crate::config::Config;
 
 pub async fn extract_handler(headers: HeaderMap, mut multipart: Multipart) -> AppResult<Json<ExtractResponse>> {
+    let config = Config::from_env().map_err(|e| AppError::config(format!("Failed to load config: {}", e)))?;
     let start = Instant::now();
     let request_id = uuid::Uuid::new_v4().to_string()[..8].to_string();
     
@@ -45,7 +47,7 @@ pub async fn extract_handler(headers: HeaderMap, mut multipart: Multipart) -> Ap
     };
     
     // Validate file size
-    let max_size_bytes = 10 * 1024 * 1024; // 10MB
+    let max_size_bytes = config.max_file_size_mb * 1024 * 1024;
     if file.size > max_size_bytes {
         warn!(
             request_id = %request_id,
@@ -55,7 +57,7 @@ pub async fn extract_handler(headers: HeaderMap, mut multipart: Multipart) -> Ap
         );
         return Err(AppError::FileTooLarge {
             size: file.size / (1024 * 1024),
-            limit: 10,
+            limit: config.max_file_size_mb,
         });
     }
     
@@ -152,6 +154,7 @@ pub async fn extract_binary_handler(
     headers: HeaderMap,
     body: axum::body::Bytes,
 ) -> AppResult<Json<ExtractResponse>> {
+    let config = Config::from_env().map_err(|e| AppError::config(format!("Failed to load config: {}", e)))?;
     let start = Instant::now();
     let request_id = uuid::Uuid::new_v4().to_string()[..8].to_string();
     
@@ -188,7 +191,7 @@ pub async fn extract_binary_handler(
     }
     
     // Validate file size
-    let max_size_bytes = 10 * 1024 * 1024; // 10MB
+    let max_size_bytes = config.max_file_size_mb * 1024 * 1024;
     if body.len() > max_size_bytes {
         warn!(
             request_id = %request_id,
@@ -198,7 +201,7 @@ pub async fn extract_binary_handler(
         );
         return Err(AppError::FileTooLarge {
             size: body.len() / (1024 * 1024),
-            limit: 10,
+            limit: config.max_file_size_mb,
         });
     }
     

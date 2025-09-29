@@ -32,7 +32,7 @@ fn test_config_validation() {
 fn test_error_codes() {
     assert_eq!(AppError::InvalidApiKey.error_code(), "INVALID_API_KEY");
     assert_eq!(AppError::RateLimitExceeded.error_code(), "RATE_LIMIT_EXCEEDED");
-    assert_eq!(AppError::FileTooLarge { size: 20, limit: 10 }.error_code(), "FILE_TOO_LARGE");
+    assert_eq!(AppError::FileTooLarge { size: 20, limit: 30 }.error_code(), "FILE_TOO_LARGE");
     assert_eq!(AppError::validation("test").error_code(), "VALIDATION_ERROR");
     assert_eq!(AppError::config("test").error_code(), "CONFIG_ERROR");
 }
@@ -43,7 +43,7 @@ fn test_error_status_codes() {
     
     assert_eq!(AppError::InvalidApiKey.status_code(), StatusCode::UNAUTHORIZED);
     assert_eq!(AppError::RateLimitExceeded.status_code(), StatusCode::TOO_MANY_REQUESTS);
-    assert_eq!(AppError::FileTooLarge { size: 20, limit: 10 }.status_code(), StatusCode::PAYLOAD_TOO_LARGE);
+    assert_eq!(AppError::FileTooLarge { size: 20, limit: 30 }.status_code(), StatusCode::PAYLOAD_TOO_LARGE);
     assert_eq!(AppError::validation("test").status_code(), StatusCode::BAD_REQUEST);
     assert_eq!(AppError::ServiceUnavailable { service: "test".to_string() }.status_code(), StatusCode::SERVICE_UNAVAILABLE);
 }

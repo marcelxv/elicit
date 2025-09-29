@@ -65,10 +65,13 @@ impl Config {
         T::Err: std::fmt::Display,
     {
         match env::var(var_name) {
-            Ok(val) => val.parse().map_err(|e| {
-                error!("Failed to parse {}: {} (using default: {:?})", var_name, e, default);
-                anyhow::anyhow!("Invalid value for {}: {}", var_name, e)
-            }),
+            Ok(val) => match val.parse() {
+                Ok(parsed) => Ok(parsed),
+                Err(e) => {
+                    warn!("Failed to parse {}: {} (using default: {:?})", var_name, e, default);
+                    Ok(default)
+                }
+            },
             Err(_) => {
                 info!("{} not set, using default: {:?}", var_name, default);
                 Ok(default)

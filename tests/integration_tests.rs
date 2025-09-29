@@ -25,7 +25,13 @@ async fn test_config_loading() {
     assert_eq!(config.server_port, 8080);
     assert_eq!(config.max_file_size_mb, 5);
     assert_eq!(config.max_concurrent_requests, 50);
-    
+
+    // Clean up after test
+    env::remove_var("SERVER_HOST");
+    env::remove_var("SERVER_PORT");
+    env::remove_var("MAX_FILE_SIZE_MB");
+    env::remove_var("MAX_CONCURRENT_REQUESTS");
+
     // Note: API key validation testing is complex due to static initialization
     // This would require a separate test process or refactoring the API key handling
 }
@@ -98,9 +104,11 @@ async fn test_concurrent_request_limits() {
     env::remove_var("SERVER_PORT");
     env::remove_var("MAX_FILE_SIZE_MB");
     env::remove_var("MAX_CONCURRENT_REQUESTS");
-    
+    env::remove_var("REQUEST_TIMEOUT_SECONDS");
+    env::remove_var("WORKER_THREADS");
+
     env::set_var("MAX_CONCURRENT_REQUESTS", "5");
-    
+
     let config = Config::from_env().unwrap();
     assert_eq!(config.max_concurrent_requests, 5);
     
